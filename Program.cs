@@ -4,6 +4,7 @@ using System.Net.Http; // For httpClient class
 using System.Threading.Tasks; // For Asynchronous behavior
 using System.Text; // For using encodings
 using System.Text.Json; // For JSON methods
+using Newtonsoft.Json; // NuGet Dependency - For Even better JSON manipulation!
 
 namespace maka2207_projekt
 {
@@ -42,7 +43,7 @@ namespace maka2207_projekt
             Console.WriteLine("--    AI DATORER AB | K O M M A N D O T O L K      --!");
             Console.WriteLine("-----------------------------------------------------!");
             Console.WriteLine("Användarnamn & lösenord (separarera med mellanslag): ");
-
+            
             // Loop until logged in!
             while (!loggedIn) {       
             string usernameAndpassword ="";
