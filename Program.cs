@@ -12,8 +12,7 @@ namespace maka2207_projekt
     {
         static async Task Main(string[] args) // Async Task makes it act asynchronous and also being able to await
         {
-            // Variable for httpOnly secured Cookie!
-            //string secretCookie = "";
+            // Initialize secretPassword variable for input
             string secretPassword = "";
 
             // Create httpClient & httpClientHandler object instances! This will be our main connection that will be re-used!
@@ -34,10 +33,10 @@ namespace maka2207_projekt
 
             // Starting screen when secret password correct
             Console.Clear();
-            Console.WriteLine("-----------------------------------------------------!");
-            Console.WriteLine("--    AI DATORER AB | K O M M A N D O T O L K      --!");
-            Console.WriteLine("-----------------------------------------------------!");
-            Console.WriteLine("Användarnamn & lösenord (separarera med mellanslag): ");
+            Console.WriteLine("---------------------------------------------------");
+            Console.WriteLine("--    AI DATORER AB | K O M M A N D O T O L K    --");
+            Console.WriteLine("---------------------------------------------------");
+            Console.WriteLine("Användarnamn & lösenord (separera med mellanslag): ");
 
             // Boolean for whether you logged in or not
             bool loggedIn = false;
