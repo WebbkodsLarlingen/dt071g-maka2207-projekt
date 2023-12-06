@@ -13,16 +13,11 @@ namespace maka2207_projekt
         static async Task Main(string[] args) // Async Task makes it act asynchronous and also being able to await
         {
             // Variable for httpOnly secured Cookie!
-            string secretCookie = "";
+            //string secretCookie = "";
             string secretPassword = "";
-            // JSON string for logging in
-            string loginJSON = "";
 
-            // Create httpClient & httpClientHandler object instances!
+            // Create httpClient & httpClientHandler object instances! This will be our main connection that will be re-used!
             (var httpClient, var handler) = Connection.CreateHttpClientAndHandler();
-
-            // Boolean for whether you logged in or not
-            bool loggedIn = false;
 
             // Inform about secret password before even attempting to login!
             Console.WriteLine("ANGE DEN HEMLIGA KODEN FÖR ATT ENS FÅ AUTENTISERA DIG!");
@@ -31,7 +26,7 @@ namespace maka2207_projekt
             secretPassword = SecretPassword.TheSecretPassword(); // Class function that hides input
 
             // Check password
-            if(secretPassword != "69super420Duper1337")
+            if(secretPassword != "hemlis")
             {
                 // Just kill application if it's not correct.
                 Environment.Exit(0);
@@ -43,60 +38,17 @@ namespace maka2207_projekt
             Console.WriteLine("--    AI DATORER AB | K O M M A N D O T O L K      --!");
             Console.WriteLine("-----------------------------------------------------!");
             Console.WriteLine("Användarnamn & lösenord (separarera med mellanslag): ");
-            
+
+            // Boolean for whether you logged in or not
+            bool loggedIn = false;
             // Loop until logged in!
-            while (!loggedIn) {       
-            string usernameAndpassword ="";
-            string username = "";
-            string password = "";
-            usernameAndpassword = Console.ReadLine(); // true = allow whitespace when typing
-
-            // Split username and password
-            string[] loginDetails = usernameAndpassword.Split(' ');
-
-            // Check at exactly both (no more or less) has been provided
-            if(loginDetails.Length == 2)
-            {
-                username = loginDetails[0];
-                password = loginDetails[1];
+            while (!loggedIn) {
+            // Attempt logging in before moving on to the next part of the program!
+            (httpClient, handler, loggedIn) = await Login.AttemptLogin(httpClient, handler, loggedIn);         
+             // If loggedIn returns as "true" then while loop finishes and we have logged in.
             }
-
-            // Create JSON Body with those values
-            loginJSON = @$"{{""username"": ""{username}"",""password"": ""{password}""}}"; // superAdmin1337
-
-            // Make the POST request to the endpoint http://localhost:5000/api/login
-            HttpResponseMessage response = await httpClient.PostAsync("api/login", new StringContent(loginJSON, Encoding.UTF8, "application/json"));
-
-            // When login was successful (only then do we receive 2XX status code!)
-            if (response.IsSuccessStatusCode)
-            {
-                // Grab cookies
-                var httpOnlyCookie = handler.CookieContainer.GetCookies(httpClient.BaseAddress);
-
-                // Store secret cookie to be used in upcoming CRUD!
-                    foreach (Cookie cookie in httpOnlyCookie)
-                    {
-                    // We only ever receive one cookie so no issues to store the correct one.
-                    secretCookie = cookie.Value;            
-                    }
-
-                // Read and display the content
-                string content = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"API Response: {content}");
-                
-                    break;
-            }
-            // Otherwise we return some other status code (NOT 2XX)
-            else
-            {
-                // Show error and loop again until logged in!
-                Console.WriteLine("Användarnamn och/eller lösenord felaktigt!");
-                    continue;
-            }
-
-            } // END OF login WHILE LOOP
             // HERE WE END UP IF LOGGED IN!
-            Console.Write(secretCookie);
+            Console.WriteLine("Du lyckades loggas in!");
 
         }
     }
