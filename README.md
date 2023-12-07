@@ -33,7 +33,8 @@ Tillgängliga kommandon i AI Datorer AB:s Kommandotolk
 -----------------------------------------------------
 LÄSA ANVÄNDARE (GET USER)
 - Läsa ut alla användare: `showallusers`
-- Läsa ut specifik användare `showuser <userName||userEmail>` OBS: Sista kommandot ovanför här = Du kan alltså söka på användare utifrån användarnamn ELLER användarens e-post.
+- Läsa ut specifik användare `showuser <userName||userEmail>` 
+OBS: Sista kommandot ovanför här = Du kan alltså söka på användare utifrån användarnamn ELLER användarens e-post.
 
 BLOCKERA ANVÄNDARE (POST BLOCKUSER)
 - Blockera specifik användare `blockuser <userName>`
