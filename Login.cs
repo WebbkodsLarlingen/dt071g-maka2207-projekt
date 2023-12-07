@@ -4,12 +4,13 @@ using System.Net.Http; // For httpClient class
 using System.Threading.Tasks; // For Asynchronous behavior
 using System.Text; // For using encodings
 using System.Text.Json; // For JSON methods
+using Newtonsoft.Json.Linq; //For Even Better JSON Methods
 
 namespace maka2207_projekt
 {
     internal class Login // Class that just allows you to login! And it is of type "Task" just so it can use async correctly!
     {
-        public static async Task<(HttpClient httpClient, HttpClientHandler handler, bool loggedIn)> AttemptLogin(HttpClient httpClient, HttpClientHandler handler, bool loggedIn)
+        public static async Task<(HttpClient httpClient, HttpClientHandler handler, bool loggedIn, string accessToken)> AttemptLogin(HttpClient httpClient, HttpClientHandler handler, bool loggedIn)
         {
            // Show that you should login and prepare variables for to store.          
             string loginJSON = "";
@@ -28,27 +29,25 @@ namespace maka2207_projekt
 
             // Make the POST request to the endpoint http://localhost:5000/api/login
             HttpResponseMessage response = await httpClient.PostAsync("api/login", new StringContent(loginJSON, Encoding.UTF8, "application/json"));
-
+            loginJSON = ""; // empty the string because of sensitive data
             // When login was successful (only then do we receive 2XX status code!)
             if (response.IsSuccessStatusCode)
             {
                 // Grab cookies
                 var httpOnlyCookie = handler.CookieContainer.GetCookies(httpClient.BaseAddress);
 
-                // Store secret cookie to be used in upcoming CRUD!
-                foreach (Cookie cookie in httpOnlyCookie)
-                {
-                    // We only ever receive one cookie so no issues to store the correct one.
-                    //secretCookie = cookie.Value;            
-                }
-
                 // Read and display the content
                 string content = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"API Response: {content}");
+               
+
+                // Serialize & extract accessToken from the `response.Conent`
+                JObject jsonResponse = JObject.Parse(content);
+                string accessToken = jsonResponse["accessToken"]?.ToString();
+
                 // If we managed to login then set to "true" and return the new connection + loggedIn=true
                 // THE NEW CONNECTION WILL ALSO HAVE THE httpOnly secure cookie neded for future REST API requests!
                 loggedIn = true;
-                return (httpClient, handler, loggedIn);
+                return (httpClient, handler, loggedIn, accessToken); // accessToken is used for real requests whereas httpOnly secure cookie just refreshes those!
             }
             // Otherwise we return some other status code (NOT 2XX)
             else
@@ -56,7 +55,7 @@ namespace maka2207_projekt
                 
                 // If we managed failed to login then set to "false" and return the new connection + loggedIn=false meaning the while loop will continue!
                 loggedIn = false;
-                return (httpClient, handler, loggedIn);
+                return (httpClient, handler, loggedIn, "");
             }
 
         }
