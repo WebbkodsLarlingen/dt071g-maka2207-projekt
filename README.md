@@ -26,7 +26,7 @@ Följande kommandon gäller efter lyckad inloggning som Systemadministratör.
 * När det står `<?>` så betyder det att denna parameter endast gäller under vissa omständigheter. Se exempelvis ändra användares behörigheter.
 * När det står `<||>` så kan du alltså skriva en av två olika parametrar, men bara en av dem.
 * <sysadminPassword> betyder att du måste avsluta kommandot med ditt nuvarande systemadministrativa lösenord annars nekas kommandot.
-* Behörigheter användare kan tilldelas är:"get_images","post_images","put_images","delete_images","get_components","post_components","put_components","delete_components".
+* Behörigheter användare kan tilldelas är:`"get_images","post_images","put_images","delete_images","get_components","post_components","put_components","delete_components"`.
 * Observera att varje kommando skrivs i en och samma rad och parametrarna måste skrivas i den ordning de visas här nedanför!
 
 Tillgängliga kommandon i AI Datorer AB:s Kommandotolk
