@@ -13,22 +13,13 @@ namespace maka2207_projekt
         {
            // Show that you should login and prepare variables for to store.          
             string loginJSON = "";
-            string usernameAndpassword = "";
-            string username = "";
-            string password = "";
+            string usernameAndpassword = ""; 
+            string username = ""; string password = "";
             usernameAndpassword = Console.ReadLine(); // true = allow whitespace when typing
-
-            // Split username and password
-            string[] loginDetails = usernameAndpassword.Split(' ');
-
-            // Check at exactly both (no more or less) has been provided
-            if (loginDetails.Length == 2)
-            {
-                username = loginDetails[0];
-                password = loginDetails[1];
-
-
-            }
+            // Split username and password by finding first whitespace and then split with substring
+            int firstSpacePos = usernameAndpassword.IndexOf(' ');
+            username = usernameAndpassword.Substring(0, firstSpacePos); 
+            password = usernameAndpassword.Substring(firstSpacePos+1);
 
             // Create JSON Body with those values
             loginJSON = @$"{{""username"": ""{username}"",""password"": ""{password}""}}"; // password in REST API is:superAdmin1337
@@ -62,8 +53,7 @@ namespace maka2207_projekt
             // Otherwise we return some other status code (NOT 2XX)
             else
             {
-                // Show error and loop again until logged in!
-                Console.WriteLine("Användarnamn och/eller lösenord felaktigt!");
+                
                 // If we managed failed to login then set to "false" and return the new connection + loggedIn=false meaning the while loop will continue!
                 loggedIn = false;
                 return (httpClient, handler, loggedIn);

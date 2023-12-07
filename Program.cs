@@ -36,6 +36,7 @@ namespace maka2207_projekt
             Console.WriteLine("---------------------------------------------------");
             Console.WriteLine("--    AI DATORER AB | K O M M A N D O T O L K    --");
             Console.WriteLine("---------------------------------------------------");
+            Console.WriteLine("-OBS: Användarnamnet får ej innehålla mellanslag!--");
             Console.WriteLine("Användarnamn & lösenord (separera med mellanslag): ");
 
             // Boolean for whether you logged in or not
@@ -44,6 +45,12 @@ namespace maka2207_projekt
             while (!loggedIn) {
             // Attempt logging in before moving on to the next part of the program!
             (httpClient, handler, loggedIn) = await Login.AttemptLogin(httpClient, handler, loggedIn);         
+
+                if(loggedIn == false)
+                {
+                    // Show error and loop again until logged in!
+                    Console.WriteLine("Användarnamn och/eller lösenord felaktigt!");
+                }
              // If loggedIn returns as "true" then while loop finishes and we have logged in.
             }
             // HERE WE END UP IF LOGGED IN!
