@@ -1,5 +1,7 @@
 # maka2207-projekt
 
+# VIKTIGT: Ja, du ska _ALDRIG_ ladda upp `.env`. Detta är bara för "angelägenhetens skull" denna gång.
+
 ## KOMMA IGÅNG
 
 0. Förbered MongoDB lokalt så att anslutning mot "localhost:27017" fungerar, dvs., att MongoDB-servern körs utan att någon måste logga in för att komma åt den lokalt.
