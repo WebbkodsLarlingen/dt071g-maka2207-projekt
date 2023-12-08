@@ -44,7 +44,7 @@ LÄSA ANVÄNDARE (GET USER)
 		- Exempel: `showuser testUser1` (visar användaren med användarnamnet:"testUser1")
 		- Exempel: `showuser test@mejl.nu` (visar användaren med e-post:"test@mejl.nu")
 
-(AV)BLOCKERA ANVÄNDARE (POST BLOCKUSER)
+*(AV)BLOCKERA ANVÄNDARE (POST BLOCKUSER)*
 - Blockera specifik användare `blockuser <userName>`	
 		- Exempel: `blockuser testUser1` (blockerar användaren som har användarnamnet:"testUser1")
 
