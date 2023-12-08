@@ -35,7 +35,7 @@ Följande kommandon gäller efter lyckad inloggning som Systemadministratör.
 
 Tillgängliga kommandon i AI Datorer AB:s Kommandotolk
 -----------------------------------------------------
-LÄSA ANVÄNDARE (GET USER)
+**LÄSA ANVÄNDARE (GET USER)**
 - Läsa ut alla användare: `showallusers`
 
 		- Exempel: `showallusers` (visar alla användare från MongoDB)
@@ -44,34 +44,34 @@ LÄSA ANVÄNDARE (GET USER)
 		- Exempel: `showuser testUser1` (visar användaren med användarnamnet:"testUser1")
 		- Exempel: `showuser test@mejl.nu` (visar användaren med e-post:"test@mejl.nu")
 
-*(AV)BLOCKERA ANVÄNDARE (POST BLOCKUSER)*
+**(AV)BLOCKERA ANVÄNDARE (POST BLOCKUSER)**
 - Blockera specifik användare `blockuser <userName>`	
 		- Exempel: `blockuser testUser1` (blockerar användaren som har användarnamnet:"testUser1")
 
 - Avblockera specifik användare `unblock <userName>`	
 		- Exempel: `unblockuser testUser1` (avblockerar användaren som har användarnamnet:"testUser1")
 
-SKAPA ANVÄNDARE (POST USER)
+**SKAPA ANVÄNDARE (POST USER)**
 - Skapa ny användare `adduser <userName> <userEmail> <userPassword>`	
 		- Exempel: `adduser testUser2 test2@mejl.nu testUserPassword1337` (skapar användare med användarnamn:"testUser2",e-post:"test2@mejl.nu",lösenord:"testUserPassword1337")
 
-ÄNDRA ANVÄNDARE (PUT USER)
+**ÄNDRA ANVÄNDARE (PUT USER)**
 - Ändra befintlig användare `changeuser <userName||userEmail> <userName||userEmail||userPassword> <newValue> <sysadminPassword>`	
 		- Exempel: `changeuser testUser1 username testUser3 superAdmin1337` (ändrar userName1's användarnamn -> userName3)
 		- Exempel: `changeuser testUser1 useremail test3@mejl.nu superAdmin1337` (ändrar userName1's e-post -> test3@mejl.nu)
 		- Exempel: `changeuser testUser1 userpassword testUserPassword420 superAdmin1337` (ändrar userName1's lösenord)
 
-RADERA ANVÄNDARE (DELETE USER)
+**RADERA ANVÄNDARE (DELETE USER)**
 - Radera befintlig användare `deleteuser <userName||userEmail> <sysadminPassword>`	
 		- Exempel: `deleteuser testUser1 superAdmin1337` (raderar användaren med användarnamnet "testUser1")
 		- Exempel: `deleteuser test@mejl.nu superAdmin1337` (raderar användaren med e-post "test@mejl.nu")
 
-LOGGA UT ANVÄNDARE (PUT USER)
+**LOGGA UT ANVÄNDARE (PUT USER)**
 - Logga ut befintlig användare `logoutuser <userName||userEmail>` (dvs., tömma deras tokens)	
 		- Exempel: `logoutuser testUser1` (tömmer tokens för användaren med användarnamn:"testuser1")
 		- Exempel: `logoutuser test@mejl.nu` (tömmer tokens för användaren med e-post:"test@mejl.nu")
 
-ÄNDRA ANVÄNDARES BEHÖRIGHETER (PUT USER)
+**ÄNDRA ANVÄNDARES BEHÖRIGHETER (PUT USER)**
 - Ändra befintlig användares roller `userroles <userName||userEmail> <add||delete> <roleToAddOrDelete> <sysadminPassword>`	
 		- Exempel: `userroles testUser1 add get_images superAdmin1337` (ger användaren med användarnamnet "testUser1" läsbehörigheter av bilder i intranätet)
 		- Exempel: `userroles testUser1 add add_images superAdmin1337` (ger användaren med användarnamnet "testUser1" behörighet att lägga till bilder i intranätet)
