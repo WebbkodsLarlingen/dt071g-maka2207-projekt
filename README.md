@@ -50,7 +50,7 @@ SKAPA ANVÄNDARE (POST USER)
 		- Exempel: `adduser testUser2 test2@mejl.nu testUserPassword1337` (skapar användare med användarnamn:"testUser2",e-post:"test2@mejl.nu",lösenord:"testUserPassword1337")
 
 ÄNDRA ANVÄNDARE (PUT USER)
-- Ändra befintlig användare `changeuser <userName||userEmail> <userName||userEmail||userPassword> <newValue> <sysadminPassword>`
+- Ändra befintlig användare `changeuser <userName||userEmail> <userName||userEmail||userPassword> <newValue> <sysadminPassword>`	
 		- Exempel: `changeuser testUser1 username testUser3 superAdmin1337` (ändrar userName1's användarnamn -> userName3)
 		- Exempel: `changeuser testUser1 useremail test3@mejl.nu superAdmin1337` (ändrar userName1's e-post -> test3@mejl.nu)
 		- Exempel: `changeuser testUser1 userpassword testUserPassword420 superAdmin1337` (ändrar userName1's lösenord)
