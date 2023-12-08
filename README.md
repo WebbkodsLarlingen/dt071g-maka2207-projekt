@@ -1,6 +1,6 @@
 # maka2207-projekt
 
-# VIKTIGT: Ja, du ska _ALDRIG_ ladda upp `.env`. Detta är bara för "angelägenhetens skull" denna gång.
+# VIKTIGT: Ja, du ska _ALDRIG_ ladda upp `.env` (inuti nodejs-mappen i detta repo). Detta är bara för "angelägenhetens skull" denna gång.
 
 ## KOMMA IGÅNG
 
@@ -36,16 +36,20 @@ Följande kommandon gäller efter lyckad inloggning som Systemadministratör.
 Tillgängliga kommandon i AI Datorer AB:s Kommandotolk
 -----------------------------------------------------
 LÄSA ANVÄNDARE (GET USER)
-- Läsa ut alla användare: `showallusers`	
-		- Exempel: `showallusers`
+- Läsa ut alla användare: `showallusers`
+
+		- Exempel: `showallusers` (visar alla användare från MongoDB)
+
 - Läsa ut specifik användare `showuser <userName||userEmail>` 	
-		- Exempel: `showuser testUser1` eller `showuser test@mejl.nu`
+		- Exempel: `showuser testUser1` (visar användaren med användarnamnet:"testUser1")
+		- Exempel: `showuser test@mejl.nu` (visar användaren med e-post:"test@mejl.nu")
 
 (AV)BLOCKERA ANVÄNDARE (POST BLOCKUSER)
 - Blockera specifik användare `blockuser <userName>`	
-		- Exempel: `blockuser testUser1`
+		- Exempel: `blockuser testUser1` (blockerar användaren som har användarnamnet:"testUser1")
+
 - Avblockera specifik användare `unblock <userName>`	
-		- Exempel: `unblockuser testUser1`
+		- Exempel: `unblockuser testUser1` (avblockerar användaren som har användarnamnet:"testUser1")
 
 SKAPA ANVÄNDARE (POST USER)
 - Skapa ny användare `adduser <userName> <userEmail> <userPassword>`	
