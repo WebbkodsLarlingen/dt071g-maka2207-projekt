@@ -10,12 +10,16 @@ namespace maka2207_projekt
 {
     internal class Program
     {
+        // GLOBAL booleans
+        static bool loggedIn = false; // Logged in?
+        static bool loggedOut = false; // Logged out?
+
         static async Task Main(string[] args) // Async Task makes it act asynchronous and also being able to await
         {
             // Main Header used through entire lifecycle of program.
             string mainHeader ="---------------------------------------------------\n--    AI DATORER AB | K O M M A N D O T O L K    --\n---------------------------------------------------";
             Console.Title = "AI DATORER AB - SYSTEMADMINISTRATIV KOMMANDOTOLK";
-            
+
 
             // Inform about secret password before even attempting to login!
             Console.WriteLine("ANGE DEN HEMLIGA KODEN FÖR ATT ENS FÅ AUTENTISERA DIG!");
@@ -34,20 +38,17 @@ namespace maka2207_projekt
 
             // Create httpClient & httpClientHandler object instances! This will be our main connection that will be re-used!
             (var httpClient, var handler) = Connection.CreateHttpClientAndHandler();
-            string accessToken = ""; // token to make HTTP requests with after login
 
             // Starting screen when secret password correct
             Console.Clear();
             Console.WriteLine(mainHeader);
             Console.WriteLine("-OBS: Användarnamnet får ej innehålla mellanslag!--");
             Console.WriteLine("Användarnamn & lösenord (separera med mellanslag): ");
-
-            // Boolean for whether you logged in or not
-            bool loggedIn = false;
+        
             // Loop until logged in!
             while (!loggedIn) {
             // Attempt logging in before moving on to the next part of the program!
-            (httpClient, handler, loggedIn, accessToken) = await Login.AttemptLogin(httpClient, handler, loggedIn);         
+            (httpClient, handler, loggedIn) = await Login.AttemptLogin(httpClient, handler, loggedIn);         
 
                 if(loggedIn == false)
                 {
@@ -58,19 +59,27 @@ namespace maka2207_projekt
             }
             // HERE WE END UP IF LOGGED IN!
             Console.Clear();
-            Console.WriteLine("Du lyckades loggas in!");
-            Console.WriteLine("Access token is:" + accessToken);
-
             Console.WriteLine(mainHeader);
-            
-            // This part BELOW logs out!
-            bool loggedOut = false;
+            Console.WriteLine("Du lyckades loggas in!");
+
+            // Command string that is used to actually do things in the MongoDB as a System Administrator
+            string command = "";
+
+            // while loop to stay logged in. Whenever we write logout (even uppercased!), it will jump out of main loop log us out
+            while(command?.ToLower() != "logout")
+            {
+
+                Console.Write(">");
+                command = Console.ReadLine();
+            }
+
+            // ATTEMPT LOG OUT AFTER LEAVING MAIN WHILE-LOOP!
             (httpClient, handler, loggedOut) = await Logout.AttemptLogout(httpClient, handler, loggedOut);
             if(loggedOut == false)
             {
                 Console.WriteLine("Misslyckades loggas ut! Din inloggningssession i databasen är således ej raderad!");
             } else { Console.WriteLine("Du är utloggad, käre Systemadministratör!"); Environment.Exit(0); }
-            // This part ABOVE logs out!
+            // GOOD BYE C# CONSOLE APP! By: maka2207 / WebbKodsLärlingen
         }
     }
 }

@@ -10,7 +10,7 @@ namespace maka2207_projekt
 {
     internal class Login // Class that just allows you to login! And it is of type "Task" just so it can use async correctly!
     {
-        public static async Task<(HttpClient httpClient, HttpClientHandler handler, bool loggedIn, string accessToken)> AttemptLogin(HttpClient httpClient, HttpClientHandler handler, bool loggedIn)
+        public static async Task<(HttpClient httpClient, HttpClientHandler handler, bool loggedIn)> AttemptLogin(HttpClient httpClient, HttpClientHandler handler, bool loggedIn)
         {
            // Show that you should login and prepare variables for to store.          
             string loginJSON = "";
@@ -37,17 +37,19 @@ namespace maka2207_projekt
                 var httpOnlyCookie = handler.CookieContainer.GetCookies(httpClient.BaseAddress);
 
                 // Read and display the content
-                string content = await response.Content.ReadAsStringAsync();
-               
+                string content = await response.Content.ReadAsStringAsync();          
 
                 // Serialize & extract accessToken from the `response.Conent`
                 JObject jsonResponse = JObject.Parse(content);
-                string accessToken = jsonResponse["accessToken"]?.ToString();
+                string accessToken = jsonResponse["accessToken"].ToString();
+
+                // Insert into Header "Authorization" to be used for future HTTP requests
+                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
 
                 // If we managed to login then set to "true" and return the new connection + loggedIn=true
                 // THE NEW CONNECTION WILL ALSO HAVE THE httpOnly secure cookie neded for future REST API requests!
                 loggedIn = true;
-                return (httpClient, handler, loggedIn, accessToken); // accessToken is used for real requests whereas httpOnly secure cookie just refreshes those!
+                return (httpClient, handler, loggedIn); // accessToken is used for real requests whereas httpOnly secure cookie just refreshes those!
             }
             // Otherwise we return some other status code (NOT 2XX)
             else
@@ -55,9 +57,10 @@ namespace maka2207_projekt
                 
                 // If we managed failed to login then set to "false" and return the new connection + loggedIn=false meaning the while loop will continue!
                 loggedIn = false;
-                return (httpClient, handler, loggedIn, "");
+                return (httpClient, handler, loggedIn);
             }
 
         }
     }
 }
+
