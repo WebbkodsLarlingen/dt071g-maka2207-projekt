@@ -14,6 +14,7 @@ namespace maka2207_projekt
         public static async Task<(HttpClient httpClient, HttpClientHandler handler, bool loggedIn)> AttemptLogout(HttpClient httpClient, HttpClientHandler handler, bool loggedOut)
         {
             // Make the POST request to the endpoint http://localhost:5000/api/logout
+            try { 
             HttpResponseMessage response = await httpClient.PostAsync("api/logout",null);
 
             // Did we log out?
@@ -25,6 +26,17 @@ namespace maka2207_projekt
                 
             // Send back new connection + if logout succeeded/failed
             return (httpClient, handler, loggedOut);
+            }
+            // Catch exceptions so Debugger don't cry! This returns loggedOut false so error shows that logging out failed!
+            catch (HttpRequestException ex)
+            {
+                loggedOut = false;
+                return (httpClient, handler, loggedOut);
+            }
+            catch (Exception ex) {
+                loggedOut = false;
+                return (httpClient, handler, loggedOut);
+            }
         }
     }
 }

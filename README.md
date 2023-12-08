@@ -22,6 +22,13 @@ Via kommandotolken kan du:
 - Du kan logga ut användare (genom att deras refresh token nollställs).
 - Du kan ändra användarnas behörigheter till att CRUDa datorkomponenter i intranätet.
 
+### SNABBA INLOGGNINGSUPPGIFTER
+(allt utan parentser)
+
+- "hemlis" är lösenordet innan du ens kan försöka logga in mot lokalt REST API!
+- "sysadmin" är användarnamnet vid inloggning
+- "superAdmin1337" är lösenordet vid inloggning (samt för vissa kommandon av säkerhetsskäl)
+
 ## KOMMANDOTOLKENS SIMPLA SYNTAX
 Följande kommandon gäller efter lyckad inloggning som Systemadministratör.
 
