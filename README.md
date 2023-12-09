@@ -10,6 +10,7 @@
 3. Öppna "nodejs"-mappen inuti VSCode för att kunna installera REST API:t och testdata lokalt! (finns INGET online).
 4. Inuti VSCode med "nodejs"-mappen öppen öppna en ny Terminal och skriv `npm run installall`. Allt installeras, MongoDB fylls med demodata och `localhost:5000` REST API-server startas.
 5. Klart! Nu kan du 'Build & Run' `maka2207-projekt` inuti Visual Studio 2022.
+
 **OBS:** `npmrun installall` är ett så kallat `batch job` så du kan behöva köra `npm run startserver` om localhost:5000 REST API slutar svara ibland på pga. Terminal VSCode-bug.
 
 ## VAD ÄR DETTA?
