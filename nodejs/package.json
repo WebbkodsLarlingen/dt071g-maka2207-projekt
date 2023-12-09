@@ -4,9 +4,11 @@
   "description": "Projektuppgiften i HT2023 DT071G Datateknik GR (A), Programmering i C#.NET av maka2207/WebbKodsLärlingen",
   "main": "index.js",
   "scripts": {
+    "installserver": "npm install",
     "installmongodb": "node scripts/installmongodb.js",
     "generatetokens": "node scripts/generatetokens.js",
-    "startserver": "nodemon server.js"
+    "startserver": "nodemon server.js",
+    "installall": "npm run installserver && npm run installmongodb && npm run startserver"
   },
   "keywords": [],
   "author": "WebbKodsLärlingen/maka2207",

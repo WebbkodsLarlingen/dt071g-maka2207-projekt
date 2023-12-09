@@ -10,10 +10,31 @@ namespace maka2207_projekt
 {
     internal class Program
     {
-        // GLOBAL booleans
+        // GLOBAL VARIABLES!
         static bool loggedIn = false; // Logged in?
         static bool loggedOut = false; // Logged out?
         static bool serverOnline = false; // REST API online?
+        static string[] commandList = // Available commands in AI Datorer AB CLI.
+            {"showallusers",
+            "showuser", 
+            "blockuser", 
+            "unblockuser", 
+            "adduser", 
+            "changeuser",
+            "deleteuser",
+            "logoutuser",
+            "userroles" };
+        static string[] rolesList = // Available roles(levels of access) any non-sysadmin admin can be assinged by the sysadmin.
+            {
+            "get_images", 
+            "post_images", 
+            "put_images", 
+            "delete_images", 
+            "get_components", 
+            "post_components", 
+            "put_components", 
+            "delete_components"
+            };
 
         static async Task Main(string[] args) // Async Task makes it act asynchronous and also being able to await
         {
@@ -21,17 +42,21 @@ namespace maka2207_projekt
             Console.Title = "AI DATORER AB - SYSTEMADMINISTRATIV KOMMANDOTOLK"; 
             // Main Header used through entire lifecycle of program.
             string mainHeader ="---------------------------------------------------\n--    AI DATORER AB | K O M M A N D O T O L K    --\n---------------------------------------------------";
-            
+
+            // Prefixes for success (green color) and error (red color)
+            string success = "\u001b[32m[OK]:\u001b[0m "; 
+            string error = "\u001b[31m[FEL]:\u001b[0m ";
+
             // Inform about secret password before even attempting to login!
             Console.WriteLine("ANGE DEN HEMLIGA KODEN FÖR ATT ENS FÅ AUTENTISERA DIG!");
 
             // Demand secret password before even showing anything else! As requested by customer
             // Initialize secretPassword variable for input
             string secretPassword = "";
-            secretPassword = SecretPassword.TheSecretPassword(); // Class function that hides input
+            // secretPassword = SecretPassword.TheSecretPassword(); // Class function that hides input
 
             // Check password
-            if(secretPassword != "hemlis")
+            if(secretPassword != "") // FIX: change back to "hemlis" after all done
             {
                 // Just kill application if it's not correct.
                 Environment.Exit(0);
@@ -71,14 +96,29 @@ namespace maka2207_projekt
 
             // Command string that is used to actually do things in the MongoDB as a System Administrator
             string command = "";
-
+            string commandSplit = ""; // Splitting the 'command' from the first " " and its parameters
+            string commandParameters = ""; // Store splitted parameters from the 'command'
             // MAIN WHILE-LOOP = Here is where all CLI commands are finally being issued to the MongoDB localhost Database!
             // while loop to stay logged in. Whenever we write logout (even uppercased!), it will jump out of main loop log us out
+            // Any "continue;" means starting back from top of this "main while-loop"
             while(command?.ToLower() != "logout")
             {
 
                 Console.Write(">");
                 command = Console.ReadLine();
+
+                if(command == "") { Console.WriteLine(error + "Skriv ett kommando!"); continue; }
+
+                // If there is not a single " " then it is invalid
+                if(!command.Contains(" ")) { Console.WriteLine(error + "Ange ett giltigt kommando!"); continue; }
+                
+                // Split command from its parameters
+                commandSplit = command.Split(' ')[0]; 
+                commandParameters = command.Split(" ")[1];
+
+                // Invalid command
+                if(!commandList.Contains(commandSplit.ToLower()))
+                { Console.WriteLine(error + "Kommandot '" + commandSplit + "' finns ej!"); continue; }
             }
 
             // ATTEMPT LOG OUT AFTER LEAVING MAIN WHILE-LOOP!

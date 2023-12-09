@@ -10,9 +10,12 @@ const bcrypt = require("bcrypt"); // ...bcrypt to check stored password
 const jwt = require("jsonwebtoken"); // ...and JSON Web Token to sign a newly created JWT!
 const refreshKey = process.env.REFRESH_TOKEN;
 const tokenKey = process.env.ACCESS_TOKEN;
+const mongoDB = require("./db.js");
+const verifyAdminPass = require("./verifyAdminPassword.js");
+const verifyAccessToken = require("./verifyAccessToken");
 
 // ENDPOINT: /api/login
-router.post("/login", async (req, res) => {
+router.post("/login", mongoDB("maka2207", "users"), async (req, res) => {
   // First check if username & password are provided
   if (!req.body.username || !req.body.password) {
     return res
@@ -23,16 +26,11 @@ router.post("/login", async (req, res) => {
   const user = req.body.username;
   const pw = req.body.password;
 
-  // Then initiate MongoDB connection
   let client;
   try {
-    client = new MongoClient(dbURL);
-    await client.connect();
-
     // Then grab maka2207 database and its collection "users"
-    const dbColUsers = client
-      .db(process.env.MONGO_DB)
-      .collection(process.env.MONGO_DB_COL_USERS);
+    client = req.dbClient;
+    const dbColUsers = req.dbCol;
 
     // Look up `username` to match it exactly | returns null if not found
     const correctUser = await dbColUsers.findOne({ username: user });
@@ -64,7 +62,7 @@ router.post("/login", async (req, res) => {
           },
           process.env.ACCESS_TOKEN,
           {
-            expiresIn: "10s",
+            expiresIn: "1d",
           }
         );
         // Now create JWT Token and sign it using REFRESH_TOKEN
@@ -124,13 +122,13 @@ router.post("/login", async (req, res) => {
     // Catch and return 500 Internal Error if it happens!
     client.close();
     return res.status(500).json({
-      message: "Fel inträffat på serversidan!",
+      message: "Databasfel. Kontakta Systemadministratören!",
     });
   }
 });
 
 // ENDPOINT: /api/logout
-router.post("/logout", async (req, res) => {
+router.post("/logout", mongoDB("maka2207", "users"), async (req, res) => {
   // If refresh_token cookie found
   if (req.cookies.refresh_token && req.cookies.refresh_token != "") {
     // Store cookie
@@ -141,15 +139,10 @@ router.post("/logout", async (req, res) => {
       const user = decoded.username;
       // Initialize MongoDB
       let client;
-      // Remove both refresh_token and access_token for `user`
       try {
-        client = new MongoClient(dbURL);
-        await client.connect();
-
-        // Select `users` collection from database maka2207
-        const dbColUsers = client
-          .db(process.env.MONGO_DB)
-          .collection(process.env.MONGO_DB_COL_USERS);
+        // Then grab maka2207 database and its collection "users"
+        client = req.dbClient;
+        const dbColUsers = req.dbCol;
 
         // Try finding user first if they logged out just after sysadmin changed their username!
         const findUser = await dbColUsers.findOne({ username: user });
@@ -197,64 +190,261 @@ router.post("/refreshatoken", async (req, res) => {});
 
 // ENDPOINTS THAT DEMAND VALID ACCESS TOKEN!
 // MIDDLEWARE - CHECK VALID ACCESS TOKEN!!!
-router.use(async (req, res, next) => {
-  // Check if access_token exists (stored in authorization)
-  if (!req.headers.authorization) {
-    return res.status(403).json({ error: "Åtkomst nekad!" });
-  }
-  // Check if authorization header begins with "Bearer "
-  if (!req.headers.authorization.includes("Bearer ")) {
-    return res.status(403).json({ error: "Åtkomst nekad!" });
-  }
-  // Store access token and try decoding it
-  const aToken = req.headers.authorization.split("Bearer ")[1];
-  try {
-    // IMPORTANT: jwt.verify will FAIL if access token has expired despite being otherwise correct!
-    const decoded = jwt.verify(aToken, tokenKey);
-    // If we succeed then we pass on the `req` object!
-    let client;
-    try {
-      // Connect DB, select `maka2207` database + `users` collection
-      client = new MongoClient(dbURL);
-      await client.connect();
-      const dbColUsers = client
-        .db(process.env.MONGO_DB)
-        .collection(process.env.MONGO_DB_COL_USERS);
-      const findUser = await dbColUsers.findOne({ username: decoded.username });
+router.use(verifyAccessToken());
 
-      // Find user stored in JWT Access_token and then compare if same in database for that user!
-      if (!findUser) {
-        return res.status(403).json({ error: "Åtkomst nekad!" });
-      }
-      if (findUser.access_token === aToken) {
-        console.log("ACCESS TOKEN FORTFARANDE GILTIG! SKICKAR VIDARE!");
-        next();
-      } else {
-        console.log("ACCESS TOKEN LÖPT UT!");
-        return res.status(403).json({ error: "Åtkomst nekad!" });
-      }
-    } catch (e) {
-      return res.status(500).json({ error: "Åtkomst nekad!" });
+// ENDPOINTS: /api/showallusers & /api/showuser
+router.get("/showallusers", mongoDB("maka2207", "users"), async (req, res) => {
+  // Check for authData req object's existence first
+  if (!req.authData || !req.authData?.username) {
+    return res.status(403).json({ error: "Åtkomst nekad!" });
+  }
+  // Then grab its variables to check against in database
+  const username = req.authData.username;
+  // Initialize MongoDB
+  let client;
+  try {
+    // Then grab maka2207 database and its collection "users"
+    client = req.dbClient;
+    const dbColUsers = req.dbCol;
+
+    // Find correct user making the request
+    const findUser = await dbColUsers.findOne({ username: username });
+    if (!findUser) {
+      client.close();
+      return res
+        .status(403)
+        .json({ error: "Åtkomst nekad! (Ingen användare)" });
     }
+    // Then check if they are authorized to continue the request
+    if (!findUser.roles.includes("get_users")) {
+      client.close();
+      return res
+        .status(403)
+        .json({ error: "Åtkomst nekad! (Rollen ej tilldelad)" });
+    }
+    // Grab all users whose `username` are NOT equal to 'sysadmin' converted to array
+    const returnUsersData = await dbColUsers
+      .find({
+        username: { $ne: "sysadmin" },
+      })
+      .toArray();
+    // Map to a new object to filter out data and then finally return it
+    const filterData = returnUsersData.map((user) => {
+      return {
+        username: user.username,
+        useremail: user.useremail,
+        userfullname: user.userfullname,
+        access_token: user.access_token == "" ? "Utgått" : user.access_token,
+        refresh_token: user.refresh_token == "" ? "Utgått" : user.refresh_token,
+        account_blocked: user.account_blocked ? "Ja" : "Nej",
+        account_activated: user.account_activated ? "Ja" : "Nej",
+        last_login: user.last_login == "" ? "Aldrig inloggad" : user.last_login,
+      };
+    });
+    client.close();
+    return res
+      .status(200)
+      .json({ success: "Alla användare hämtade!", data: filterData });
   } catch (e) {
-    // Invalid or expired access token
-    return res.status(500).json({ error: "Åtkomst nekad!" });
+    // MONGODB FAILURE!
+    client.close();
+    return res.status(403).json({ error: "Åtkomst nekad!", e });
   }
 });
 
-// ENDPOINTS: /api/showallusers & /api/showuser
-router.get("/showallsusers", async (req, res) => {});
-router.get("/showuser", async (req, res) => {});
+router.get("/showuser", mongoDB("maka2207", "users"), async (req, res) => {
+  // Check for authData req object's existence first
+  if (!req.authData || !req.authData?.username) {
+    return res.status(403).json({ error: "Åtkomst nekad!" });
+  }
+  // Check `user`name or `user`email was provided!
+  if (!req.body?.user) {
+    return res
+      .status(400)
+      .json({ error: "Användarnamn eller e-post för användaren saknas!" });
+  }
+  // Not allowed to read about 'sysadmin'
+  const sysadminCheck = req.body.user.toLowerCase();
+  if (
+    sysadminCheck === "sysadmin" ||
+    sysadminCheck === "sysadmin@aidatorer.se"
+  ) {
+    return res.status(403).json({
+      error: `Du saknar behörighet att läsa om denna användare!`,
+    });
+  }
+
+  // Grab `username` from authData & `user` from JSON Body
+  const username = req.authData.username;
+  const user = req.body.user;
+
+  // Initialize MongoDB
+  let client;
+  try {
+    // Then grab maka2207 database and its collection "users"
+    client = req.dbClient;
+    const dbColUsers = req.dbCol;
+
+    // Find correct user making the request
+    const findUser = await dbColUsers.findOne({ username: username });
+    if (!findUser) {
+      client.close();
+      return res
+        .status(403)
+        .json({ error: "Åtkomst nekad! (Ingen användare)" });
+    }
+    // Then check if they are authorized to continue the request
+    if (!findUser.roles.includes("get_users")) {
+      client.close();
+      return res
+        .status(403)
+        .json({ error: "Åtkomst nekad! (Rollen ej tilldelad)" });
+    }
+
+    // Try find `user` by username or useremail
+    const findSingleUser = await dbColUsers.findOne({
+      $or: [{ username: user }, { useremail: user }],
+    });
+    // `user` not found
+    if (!findSingleUser) {
+      client.close();
+      return res.status(404).json({
+        error: `Användaren '${user}' finns inte. Eventuellt kontrollera stavning!`,
+      });
+    }
+    // User found and OK to read! Create new object with filtered data
+    const returnSingleUser = {
+      username: findSingleUser.username,
+      useremail: findSingleUser.useremail,
+      userfullname: findSingleUser.userfullname,
+      access_token:
+        findSingleUser.access_token == ""
+          ? "Utgått"
+          : findSingleUser.access_token,
+      refresh_token:
+        findSingleUser.refresh_token == ""
+          ? "Utgått"
+          : findSingleUser.refresh_token,
+      account_blocked: findSingleUser.account_blocked ? "Ja" : "Nej",
+      account_activated: findSingleUser.account_activated ? "Ja" : "Nej",
+      roles: findSingleUser.roles,
+      last_login:
+        findSingleUser.last_login == ""
+          ? "Aldrig inloggad"
+          : findSingleUser.last_login,
+    };
+    client.close();
+    return res
+      .status(200)
+      .json({ success: "Användaren hämtad!", data: returnSingleUser });
+  } catch (e) {
+    // MONGODB FAILURE!
+    client.close();
+    return res.status(403).json({ error: "Åtkomst nekad! (DB)", e });
+  }
+});
 
 // ENDPOINTS: /api/adduser & /api/deleteuser
-router.post("/adduser", async (req, res) => {});
-router.delete("/deleteuser", async (req, res) => {});
+router.post("/adduser", mongoDB("maka2207", "users"), async (req, res) => {});
+
+router.delete(
+  "/deleteuser",
+  mongoDB("maka2207", "users"),
+  verifyAdminPass(),
+  async (req, res) => {
+    // Check for authData req object's existence first
+    if (!req.authData || !req.authData?.username) {
+      return res.status(403).json({ error: "Åtkomst nekad!" });
+    }
+    // Check `user`name or `user`email was provided!
+    if (!req.body?.user) {
+      return res
+        .status(400)
+        .json({ error: "Användarnamn eller e-post för användaren saknas!" });
+    }
+
+    // Not allowed to delete 'sysadmin'
+    const sysadminCheck = req.body.user.toLowerCase();
+    if (
+      sysadminCheck === "sysadmin" ||
+      sysadminCheck === "sysadmin@aidatorer.se"
+    ) {
+      return res.status(403).json({
+        error: `Du saknar behörighet att radera denna användare!`,
+      });
+    }
+
+    // Grab necessary variables
+    const username = req.authData.username;
+    const userToDelete = req.body.user;
+
+    // Init MongoDB
+    let client;
+    try {
+      // Then grab maka2207 database and its collection "users"
+      client = req.dbClient;
+      const dbColUsers = req.dbCol;
+
+      // Look up `username` to match it exactly | returns null if not found
+      const correctUser = await dbColUsers.findOne({ username: username });
+
+      // If we don't find it, we assume wrong username or password and stop request right here
+      if (!correctUser) {
+        // correctUser == 'sysadmin'
+        return res
+          .status(403)
+          .json({ error: "Du saknar behörighet att radera denna användare!" });
+      }
+
+      // Look up `user` to match it exactly | returns null if not found
+      const findSingleUser = await dbColUsers.findOne({
+        $or: [{ username: userToDelete }, { useremail: userToDelete }],
+      });
+
+      // If `user`'s username or useremail doesn't exist
+      if (!findSingleUser) {
+        client.close();
+        return res.status(404).json({
+          error: `Användaren med användaruppgiften '${userToDelete}' finns inte. Eventuellt kontrollera stavning!`,
+        });
+      }
+
+      // Now delete user!
+      const deleteUser = await dbColUsers.deleteOne({
+        $or: [{ username: userToDelete }, { useremail: userToDelete }],
+      });
+
+      // When user found
+      if (deleteUser.deletedCount === 1) {
+        client.close();
+        return res.status(200).json({
+          success: `Användaren med användaruppgiften '${userToDelete}' raderad!`,
+        });
+        // When user not found
+      } else {
+        client.close();
+        return res.status(404).json({
+          error: `Användaren '${userToDelete}' finns inte. Eventuellt kontrollera stavning!`,
+        });
+      }
+    } catch (e) {
+      client.close();
+      return res
+        .status(500)
+        .json({ error: "Databasfel. Kontakta Systemadministratören!" });
+    }
+  }
+);
 
 // ENDPOINTS: /api/blockuser & /api/unblockuser & /api/changeuser & /api/userroles
-router.put("/blockuser", async (req, res) => {});
-router.put("/unblockuser", async (req, res) => {});
-router.put("/changeuser", async (req, res) => {});
-router.put("/userroles", async (req, res) => {});
+router.put("/blockuser", mongoDB("maka2207", "users"), async (req, res) => {});
+router.put(
+  "/unblockuser",
+  mongoDB("maka2207", "users"),
+  async (req, res) => {}
+);
+router.put("/changeuser", mongoDB("maka2207", "users"), async (req, res) => {});
+router.put("/userroles", mongoDB("maka2207", "users"), async (req, res) => {});
 
 // This is the LAST one because if we have it before others it will be ran and stop the rest of the script!
 // This is the "catch-all" responses for CRUD when someone is requesting something that does not exist.
