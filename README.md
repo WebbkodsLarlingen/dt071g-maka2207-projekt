@@ -25,7 +25,7 @@ Via kommandotolken kan du:
 - Du kan ändra användarnas behörigheter till att CRUDa datorkomponenter i intranätet.
 
 ### SNABBA INLOGGNINGSUPPGIFTER
-(allt utan parentser)
+(allt utan citattecken)
 
 - "hemlis" är lösenordet innan du ens kan försöka logga in mot lokalt REST API!
 - "sysadmin" är användarnamnet vid inloggning
