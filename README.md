@@ -1,95 +1,87 @@
 # maka2207-projekt
 
-# VIKTIGT: Ja, du ska _ALDRIG_ ladda upp `.env` (inuti nodejs-mappen i detta repo). Detta är bara för "angelägenhetens skull" denna gång.
+# VIKTIGT: Ja, du ska _ALDRIG_ ladda upp `.env` (inuti nodejs-mappen i detta repo). Detta Ã¤r bara fÃ¶r "angelÃ¤genhetens skull" denna gÃ¥ng.
 
-## KOMMA IGÅNG
+## KOMMA IGÃ…NG
 
-0. Förbered MongoDB lokalt så att anslutning mot "localhost:27017" fungerar, dvs., att MongoDB-servern körs utan att någon måste logga in för att komma åt den lokalt.
+0. FÃ¶rbered MongoDB lokalt sÃ¥ att anslutning mot "localhost:27017" fungerar, dvs., att MongoDB-servern kÃ¶rs utan att nÃ¥gon mÃ¥ste logga in fÃ¶r att komma Ã¥t den lokalt.
 1. Klona git repot lokalt.
-2. I Visual Studio 2022 öppna -> "Tools" -> NuGet Package Manager -> Package Manager Console. I den Terminalen, installera `Newtonsoft.Json (13.0.3)`.
-3. Öppna "nodejs"-mappen inuti VSCode för att kunna installera REST API:t och testdata lokalt! (finns INGET online).
-4. Inuti VSCode med "nodejs"-mappen öppen öppna en ny Terminal och skriv `npm run installall`. Allt installeras, MongoDB fylls med demodata och `localhost:5000` REST API-server startas.
+2. I Visual Studio 2022 Ã¶ppna -> "Tools" -> NuGet Package Manager -> Package Manager Console. I den Terminalen, installera `Newtonsoft.Json (13.0.3)`.
+3. Ã–ppna "nodejs"-mappen inuti VSCode fÃ¶r att kunna installera REST API:t och testdata lokalt! (finns INGET online).
+4. Inuti VSCode med "nodejs"-mappen Ã¶ppen sÃ¥ Ã¶ppna en ny Terminal och skriv `npm installall`.
 5. Klart! Nu kan du 'Build & Run' `maka2207-projekt` inuti Visual Studio 2022.
-**OBS:** `npmrun installall` är ett så kallat `batch job` så du kan behöva köra `npm run startserver` om localhost:5000 REST API slutar svara ibland på pga. Terminal VSCode-bug.
+**OBS:** `npmrun installall` Ã¤r ett sÃ¥ kallat `batch job` sÃ¥ du kan behÃ¶va kÃ¶ra `npm run startserver` om localhost:5000 REST API slutar svara ibland pÃ¥ pga. Terminal VSCode-bug.
 
-## VAD ÄR DETTA?
+## VAD Ã„R DETTA?
 
-Projektet är en Console App-baserad KOMMANDOTOLK (CLI = Command-Line Interface) för Systemadministratör vid AI Datorer AB.
+Projektet Ã¤r en Console App-baserad KOMMANDOTOLK (CLI = Command-Line Interface) fÃ¶r SystemadministratÃ¶r vid AI Datorer AB.
 
 Via kommandotolken kan du:
-- Administrera över anställda med olika behörigheter som arbetar vid AI Datorer AB.
-- Du kan blockera användare (de kan logga in men meddelas att deras konton är låsta).
-- Du kan CRUD:a användare (utläsa, skapa nya, ändra och/eller radera befintliga).
-- Du kan logga ut användare (genom att deras refresh token nollställs).
-- Du kan ändra användarnas behörigheter till att CRUDa datorkomponenter i intranätet.
+- Administrera Ã¶ver anstÃ¤llda med olika behÃ¶righeter som arbetar vid AI Datorer AB.
+- Du kan blockera anvÃ¤ndare (de kan logga in men meddelas att deras konton Ã¤r lÃ¥sta).
+- Du kan CRUD:a anvÃ¤ndare (utlÃ¤sa, skapa nya, Ã¤ndra och/eller radera befintliga).
+- Du kan logga ut anvÃ¤ndare (genom att deras refresh token nollstÃ¤lls).
+- Du kan Ã¤ndra anvÃ¤ndarnas behÃ¶righeter till att CRUDa datorkomponenter i intranÃ¤tet.
 
 ### SNABBA INLOGGNINGSUPPGIFTER
 (allt utan parentser)
 
-- "hemlis" är lösenordet innan du ens kan försöka logga in mot lokalt REST API!
-- "sysadmin" är användarnamnet vid inloggning
-- "superAdmin1337" är lösenordet vid inloggning (samt för vissa kommandon av säkerhetsskäl)
+- "hemlis" Ã¤r lÃ¶senordet innan du ens kan fÃ¶rsÃ¶ka logga in mot lokalt REST API!
+- "sysadmin" Ã¤r anvÃ¤ndarnamnet vid inloggning
+- "superAdmin1337" Ã¤r lÃ¶senordet vid inloggning (samt fÃ¶r vissa kommandon av sÃ¤kerhetsskÃ¤l)
 
 ## KOMMANDOTOLKENS SIMPLA SYNTAX
-Följande kommandon gäller efter lyckad inloggning som Systemadministratör.
+FÃ¶ljande kommandon gÃ¤ller efter lyckad inloggning som SystemadministratÃ¶r.
 
-* När det står `<>` så betyder det att här kommer din paremeter in. Men parametrar skrivs utan de faktiska "<>"-tecknen.
-* När det står `<||>` så kan du alltså skriva en av två olika parametrar, men bara en av dem.
-* <sysadminPassword> betyder att du måste avsluta kommandot med ditt nuvarande systemadministrativa lösenord annars nekas kommandot.
-* Behörigheter användare kan tilldelas är följande (du skriver ej citattecken eller komman och du kan bara CRUDa en roll i taget per användare): 
+* NÃ¤r det stÃ¥r `<>` sÃ¥ betyder det att hÃ¤r kommer din paremeter in. Men parametrar skrivs utan de faktiska "<>"-tecknen.
+* NÃ¤r det stÃ¥r `<||>` sÃ¥ kan du alltsÃ¥ skriva en av tvÃ¥ olika parametrar, men bara en av dem.
+* <sysadminPassword> betyder att du mÃ¥ste avsluta kommandot med ditt nuvarande systemadministrativa lÃ¶senord annars nekas kommandot.
+* BehÃ¶righeter anvÃ¤ndare kan tilldelas Ã¤r fÃ¶ljande (du skriver ej citattecken eller komman och du kan bara CRUDa en roll i taget per anvÃ¤ndare): 
   - `"get_images", "post_images", "put_images", "delete_images", "get_components", "post_components", "put_components", "delete_components"`.
-* Observera att vissa kommandon kräver att du även matar in ditt lösenord igen annars kommer kommandot att nekas trots att skulle ha gått igenom!
-* Observera att varje kommando skrivs i en och samma rad och parametrarna måste skrivas i den ordning de visas här nedanför!
+* Observera att vissa kommandon krÃ¤ver att du Ã¤ven matar in ditt lÃ¶senord igen annars kommer kommandot att nekas trots att skulle ha gÃ¥tt igenom!
+* Observera att varje kommando skrivs i en och samma rad och parametrarna mÃ¥ste skrivas i den ordning de visas hÃ¤r nedanfÃ¶r!
 
-Tillgängliga kommandon i AI Datorer AB:s Kommandotolk
+TillgÃ¤ngliga kommandon i AI Datorer AB:s Kommandotolk
 -----------------------------------------------------
-**LÄSA ANVÄNDARE (GET USER)**
-- Läsa ut alla användare: `showallusers`
+**LÃ„SA ANVÃ„NDARE (GET USER)**
+- LÃ¤sa ut alla anvÃ¤ndare: `showallusers`
 
-		- Exempel: `showallusers` (visar alla användare från MongoDB)
+		- Exempel: `showallusers` (visar alla anvÃ¤ndare frÃ¥n MongoDB)
 
-- Läsa ut specifik användare `showuser <userName||userEmail>` 
-	
-		- Exempel: `showuser testUser1` (visar användaren med användarnamnet:"testUser1")
-		- Exempel: `showuser test@mejl.nu` (visar användaren med e-post:"test@mejl.nu")
+- LÃ¤sa ut specifik anvÃ¤ndare `showuser <userName||userEmail>` 	
+		- Exempel: `showuser testUser1` (visar anvÃ¤ndaren med anvÃ¤ndarnamnet:"testUser1")
+		- Exempel: `showuser test@mejl.nu` (visar anvÃ¤ndaren med e-post:"test@mejl.nu")
 
-**(AV)BLOCKERA ANVÄNDARE (PUT BLOCKUSER)**
-- Blockera specifik användare `blockuser <userName>`
-	
-		- Exempel: `blockuser testUser1` (blockerar användaren som har användarnamnet:"testUser1")
+**(AV)BLOCKERA ANVÃ„NDARE (PUT BLOCKUSER)**
+- Blockera specifik anvÃ¤ndare `blockuser <userName>`	
+		- Exempel: `blockuser testUser1` (blockerar anvÃ¤ndaren som har anvÃ¤ndarnamnet:"testUser1")
 
-- Avblockera specifik användare `unblock <userName>`
-	
-		- Exempel: `unblockuser testUser1` (avblockerar användaren som har användarnamnet:"testUser1")
+- Avblockera specifik anvÃ¤ndare `unblock <userName>`	
+		- Exempel: `unblockuser testUser1` (avblockerar anvÃ¤ndaren som har anvÃ¤ndarnamnet:"testUser1")
 
-**SKAPA ANVÄNDARE (POST USER)**
-- Skapa ny användare `adduser <userName> <userEmail> <userPassword>`
-	
-		- Exempel: `adduser testUser2 test2@mejl.nu testUserPassword1337` (skapar användare med användarnamn:"testUser2",e-post:"test2@mejl.nu",lösenord:"testUserPassword1337")
+**SKAPA ANVÃ„NDARE (POST USER)**
+- Skapa ny anvÃ¤ndare `adduser <userName> <userEmail> <userPassword>`	
+		- Exempel: `adduser testUser2 test2@mejl.nu testUserPassword1337` (skapar anvÃ¤ndare med anvÃ¤ndarnamn:"testUser2",e-post:"test2@mejl.nu",lÃ¶senord:"testUserPassword1337")
 
-**ÄNDRA ANVÄNDARE (PUT USER)**
-- Ändra befintlig användare `changeuser <userName||userEmail> <userName||userEmail||userPassword> <newValue> <sysadminPassword>`
-	
-		- Exempel: `changeuser testUser1 username testUser3 superAdmin1337` (ändrar userName1's användarnamn -> userName3)
-		- Exempel: `changeuser testUser1 useremail test3@mejl.nu superAdmin1337` (ändrar userName1's e-post -> test3@mejl.nu)
-		- Exempel: `changeuser testUser1 userpassword testUserPassword420 superAdmin1337` (ändrar userName1's lösenord)
+**Ã„NDRA ANVÃ„NDARE (PUT USER)**
+- Ã„ndra befintlig anvÃ¤ndare `changeuser <userName||userEmail> <userName||userEmail||userPassword> <newValue> <sysadminPassword>`	
+		- Exempel: `changeuser testUser1 username testUser3 superAdmin1337` (Ã¤ndrar userName1's anvÃ¤ndarnamn -> userName3)
+		- Exempel: `changeuser testUser1 useremail test3@mejl.nu superAdmin1337` (Ã¤ndrar userName1's e-post -> test3@mejl.nu)
+		- Exempel: `changeuser testUser1 userpassword testUserPassword420 superAdmin1337` (Ã¤ndrar userName1's lÃ¶senord)
 
-**RADERA ANVÄNDARE (DELETE USER)**
-- Radera befintlig användare `deleteuser <userName||userEmail> <sysadminPassword>`
-	
-		- Exempel: `deleteuser testUser1 superAdmin1337` (raderar användaren med användarnamnet "testUser1")
-		- Exempel: `deleteuser test@mejl.nu superAdmin1337` (raderar användaren med e-post "test@mejl.nu")
+**RADERA ANVÃ„NDARE (DELETE USER)**
+- Radera befintlig anvÃ¤ndare `deleteuser <userName||userEmail> <sysadminPassword>`	
+		- Exempel: `deleteuser testUser1 superAdmin1337` (raderar anvÃ¤ndaren med anvÃ¤ndarnamnet "testUser1")
+		- Exempel: `deleteuser test@mejl.nu superAdmin1337` (raderar anvÃ¤ndaren med e-post "test@mejl.nu")
 
-**LOGGA UT ANVÄNDARE (PUT USER)**
-- Logga ut befintlig användare `logoutuser <userName||userEmail>` (dvs., tömma deras tokens)
-	
-		- Exempel: `logoutuser testUser1` (tömmer tokens för användaren med användarnamn:"testuser1")
-		- Exempel: `logoutuser test@mejl.nu` (tömmer tokens för användaren med e-post:"test@mejl.nu")
+**LOGGA UT ANVÃ„NDARE (PUT USER)**
+- Logga ut befintlig anvÃ¤ndare `logoutuser <userName||userEmail>` (dvs., tÃ¶mma deras tokens)	
+		- Exempel: `logoutuser testUser1` (tÃ¶mmer tokens fÃ¶r anvÃ¤ndaren med anvÃ¤ndarnamn:"testuser1")
+		- Exempel: `logoutuser test@mejl.nu` (tÃ¶mmer tokens fÃ¶r anvÃ¤ndaren med e-post:"test@mejl.nu")
 
-**ÄNDRA ANVÄNDARES BEHÖRIGHETER (PUT USER)**
-- Ändra befintlig användares roller `userroles <userName||userEmail> <add||delete> <roleToAddOrDelete> <sysadminPassword>`
-	
-		- Exempel: `userroles testUser1 add get_images superAdmin1337` (ger användaren med användarnamnet "testUser1" läsbehörigheter av bilder i intranätet)
-		- Exempel: `userroles testUser1 add add_images superAdmin1337` (ger användaren med användarnamnet "testUser1" behörighet att lägga till bilder i intranätet)
-		- Exempel: `userroles testUser1 add delete_images superAdmin1337` (ger användaren med användarnamnet "testUser1" behörighet att radera bilder i intranätet)
-		- Exempel: `userroles test@mejl.nu delete delete_images superAdmin1337` (tar bort raderingsbehörigheter av bilder i intranätet för användaren med e-post:"test@mejl.nu")
+**Ã„NDRA ANVÃ„NDARES BEHÃ–RIGHETER (PUT USER)**
+- Ã„ndra befintlig anvÃ¤ndares roller `userroles <userName||userEmail> <add||delete> <roleToAddOrDelete> <sysadminPassword>`	
+		- Exempel: `userroles testUser1 add get_images superAdmin1337` (ger anvÃ¤ndaren med anvÃ¤ndarnamnet "testUser1" lÃ¤sbehÃ¶righeter av bilder i intranÃ¤tet)
+		- Exempel: `userroles testUser1 add add_images superAdmin1337` (ger anvÃ¤ndaren med anvÃ¤ndarnamnet "testUser1" behÃ¶righet att lÃ¤gga till bilder i intranÃ¤tet)
+		- Exempel: `userroles testUser1 add delete_images superAdmin1337` (ger anvÃ¤ndaren med anvÃ¤ndarnamnet "testUser1" behÃ¶righet att radera bilder i intranÃ¤tet)
+		- Exempel: `userroles test@mejl.nu delete delete_images superAdmin1337` (tar bort raderingsbehÃ¶righeter av bilder i intranÃ¤tet fÃ¶r anvÃ¤ndaren med e-post:"test@mejl.nu")
