@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # maka2207-projekt
 
 # VIKTIGT: Ja, du ska _ALDRIG_ ladda upp `.env` (inuti nodejs-mappen i detta repo). Detta är bara för "angelägenhetens skull" denna gång.
