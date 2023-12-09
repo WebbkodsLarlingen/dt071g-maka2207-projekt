@@ -1,4 +1,4 @@
-# maka2207-projekt
+# maka2207-projekt DT071 Programmering i C#.NET
 
 # VIKTIGT: Ja, du ska _ALDRIG_ ladda upp `.env` (inuti nodejs-mappen i detta repo). Detta är bara för "angelägenhetens skull" denna gång.
 
