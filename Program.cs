@@ -116,7 +116,7 @@ namespace maka2207_projekt
                 commandSplit = command.Split(' ')[0]; 
                 commandParameters = command.Split(" ")[1];
 
-                // Invalid command
+                // If Invalid command
                 if(!commandList.Contains(commandSplit.ToLower()))
                 { Console.WriteLine(error + "Kommandot '" + commandSplit + "' finns ej!"); continue; }
             }
