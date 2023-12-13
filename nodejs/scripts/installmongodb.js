@@ -537,6 +537,7 @@ async function installMongoDB() {
     },
     {
       userip: "127.0.0.1",
+      username: "testuser9",
       useremail: "testuser9@AiDatorer.se",
       userfullname: "Lukas Rappsberg",
       userpassword: hashedPwTestUser9,
@@ -549,6 +550,7 @@ async function installMongoDB() {
     },
     {
       userip: "127.0.0.1",
+      username: "testuser10",
       useremail: "testuser10@AiDatorer.se",
       userfullname: "Emma Takmursson",
       userpassword: hashedPwTestUser10,

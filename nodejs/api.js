@@ -436,15 +436,26 @@ router.delete(
   }
 );
 
-// ENDPOINTS: /api/blockuser & /api/unblockuser & /api/changeuser & /api/userroles
+// ENDPOINTS: /api/blockuser & /api/unblockuser & /api/changeuser & /api/userroles & /api/logoutuser
 router.put("/blockuser", mongoDB("maka2207", "users"), async (req, res) => {});
 router.put(
   "/unblockuser",
   mongoDB("maka2207", "users"),
   async (req, res) => {}
 );
-router.put("/changeuser", mongoDB("maka2207", "users"), async (req, res) => {});
-router.put("/userroles", mongoDB("maka2207", "users"), async (req, res) => {});
+router.put(
+  "/changeuser",
+  mongoDB("maka2207", "users"),
+  verifyAdminPass(),
+  async (req, res) => {}
+);
+router.put(
+  "/userroles",
+  mongoDB("maka2207", "users"),
+  verifyAdminPass(),
+  async (req, res) => {}
+);
+router.put("/logoutuser", mongoDB("maka2207", "users"), async (req, res) => {});
 
 // This is the LAST one because if we have it before others it will be ran and stop the rest of the script!
 // This is the "catch-all" responses for CRUD when someone is requesting something that does not exist.

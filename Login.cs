@@ -21,6 +21,7 @@ namespace maka2207_projekt
             while (true)
             {
                 // Ask for input
+                Console.Write(">");
                 usernameAndpassword = Console.ReadLine();
 
                 // Check that 
@@ -38,7 +39,7 @@ namespace maka2207_projekt
                     }
                 }
                 // Only shown when failed above
-                Console.WriteLine("Separera användarnamn och lösenord med ett mellanslag!");
+                Console.WriteLine("\u001b[31m[FEL]:\u001b[0m Separera användarnamn och lösenord med ett mellanslag!");
             }
             
             // INPUT VALID -> Split username and password by finding first whitespace and then split with substring
