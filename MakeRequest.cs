@@ -45,7 +45,7 @@ namespace maka2207_projekt
                 return (httpClient, handler, resData, resStatus);
             }
 
-            // OLDER "LEGACY" VERSIONS
+            // OLDER "LEGACY VERSIONS" (just a few hours old!)
             // REST API - GET /showallusers (JSON BODY {})
             if (apiStr == "/showallusers")
             {
@@ -87,8 +87,7 @@ namespace maka2207_projekt
                     resData = responseContent; resStatus = false;
                     return (httpClient, handler, resData, resStatus);
                 }
-            }
-           
+            }       
             // When the impossible happens!
             resData = "<Detta borde inte visas. Kontakta den som kodat detta program!";
             resStatus = false;

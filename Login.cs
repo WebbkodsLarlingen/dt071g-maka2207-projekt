@@ -97,9 +97,6 @@ namespace maka2207_projekt
                 loggedIn = false; serverOnline = false;
                 return (httpClient, handler, loggedIn, serverOnline);
             }
-
-            
-
         }
     }
 }
