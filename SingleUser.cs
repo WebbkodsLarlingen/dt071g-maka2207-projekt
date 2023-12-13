@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace maka2207_projekt
 {
-    internal class SingleUser
-    {
+
         public class UserData
         {
             [JsonProperty("username")]
@@ -38,5 +37,4 @@ namespace maka2207_projekt
             [JsonProperty("last_login")]
             public string Last_login { get; set; }
         }
-    }
 }

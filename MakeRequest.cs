@@ -17,7 +17,7 @@ namespace maka2207_projekt
             // Create HttpRequestMessage object
             var reqAll = new HttpRequestMessage
             {
-                // Choose correct method by provided variable
+                // Choose correct HttpMethod by provided variable
                 Method = methodType == "get" ? HttpMethod.Get :
                          methodType == "post" ? HttpMethod.Post :
                          methodType == "put" ? HttpMethod.Put : HttpMethod.Delete,

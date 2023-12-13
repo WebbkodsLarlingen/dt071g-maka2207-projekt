@@ -238,6 +238,7 @@ router.get("/showallusers", mongoDB("maka2207", "users"), async (req, res) => {
         refresh_token: user.refresh_token == "" ? "Utgått" : user.refresh_token,
         account_blocked: user.account_blocked ? "Ja" : "Nej",
         account_activated: user.account_activated ? "Ja" : "Nej",
+        roles: user.roles,
         last_login: user.last_login == "" ? "Aldrig inloggad" : user.last_login,
       };
     });

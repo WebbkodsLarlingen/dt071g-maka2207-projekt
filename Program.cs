@@ -7,7 +7,7 @@ using System.Text.Json; // For JSON methods
 using Newtonsoft.Json; // NuGet Dependency - For Even better JSON manipulation!
 using System.Runtime.InteropServices.JavaScript;
 using Newtonsoft.Json.Linq;
-using static maka2207_projekt.SingleUser;
+using static maka2207_projekt.UserData;
 
 namespace maka2207_projekt
 {
@@ -255,6 +255,7 @@ namespace maka2207_projekt
                 Console.WriteLine(mainHeaderLoggedIn);
             }
 
+            // We only end up here when typing ONLY "logout" (case-insensitive btw!)
             // ATTEMPT LOG OUT AFTER LEAVING MAIN WHILE-LOOP!
             (httpClient, handler, loggedOut) = await Logout.AttemptLogout(httpClient, handler, loggedOut);
             if(loggedOut == false)
