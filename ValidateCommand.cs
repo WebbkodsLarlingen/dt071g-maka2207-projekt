@@ -74,18 +74,8 @@ namespace maka2207_projekt
             "user,adddel,role,password", // userroles
 
         };
-        // This string array is only used by "/userroles" REST API endpoint request
-        static string[] rolesList = // Available roles(levels of access) any non-sysadmin admin can be assinged by the sysadmin.
-            {
-            "get_images",
-            "post_images",
-            "put_images",
-            "delete_images",
-            "get_components",
-            "post_components",
-            "put_components",
-            "delete_components"
-            };
+
+        // The actual Async Function Itself
         public static async Task<(string[] jsonProps, string[] paramValues, string apiEP, bool commandOK, string error, string crudType)> Validate(string command, bool commandOK)
         {
             // Split command from its possible params (by splitting ONLY on first ' ')
@@ -105,7 +95,7 @@ namespace maka2207_projekt
                 return (new string[0], new string[0], "", commandOK, "Kommandot '" + commandSplit[0] + "' finns ej!","");
             }
 
-            // Grab array index of valid command, this is used by to pick correct array element of remaining arrays!
+            // Grab array index of valid command, this is used to pick correct array element of remaining arrays!
             string validCommand = commandSplit[0].ToLower();
             int correctArrIndex = Array.IndexOf(commandList, validCommand);
 

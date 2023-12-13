@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace maka2207_projekt
 {
-
+        // Simple data structure class to deserialize `users` collection MongoDB data!
         public class UserData
         {
             [JsonProperty("username")]

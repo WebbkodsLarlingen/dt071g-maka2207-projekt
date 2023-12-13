@@ -128,7 +128,7 @@ namespace maka2207_projekt
                     jsonBody.Add(jsonProps[i], paramVals[i]);
                 }
                 string jsonString = jsonBody.ToString();
-                Console.WriteLine("JSON Body: " + jsonString + "HttpMethod: " + methodType);
+                Console.WriteLine("JSON Body: " + jsonString + "\nHttpMethod: " + methodType);
 
                 // Boolean for possible response codes (OK or NOT) and stringified JSON
                 bool resStat = false; string strJSON = "";
