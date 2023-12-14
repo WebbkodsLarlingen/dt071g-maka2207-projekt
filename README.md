@@ -7,9 +7,9 @@
 0. Förbered MongoDB lokalt så att anslutning mot "localhost:27017" fungerar, dvs., att MongoDB-servern körs utan att någon måste logga in för att komma åt den lokalt.
 1. Klona git repot lokalt.
 2. I Visual Studio 2022 öppna -> "Tools" -> NuGet Package Manager -> Package Manager Console. I den Terminalen, skriv `Install-Package Newtonsoft.Json` eller installera `Newtonsoft.Json (13.0.3)` manuellt.
-3. Öppna "nodejs"-mappen inuti VSCode för att kunna installera REST API:t och testdata lokalt! (finns INGET online).
-4. Inuti VSCode med "nodejs"-mappen öppen öppna en ny Terminal och skriv `npm run installall`. Allt installeras, MongoDB fylls med demodata.
-5. Kör sedan i samma Terminal `npm run startserver` så körs nu REST API:t lokalt mot `localhost:5000`.
+3. Sen i Visual Studio 2022 öppna -> "Tools" -> "Command Line" -> "Developer Command Prompt" och skriv sedan `cd nodejs` för att kunna installera REST API:t och testdata lokalt! (finns INGET online).
+4. Skriv sedan i samma öppna terminal `npm run installall`. Allt installeras, MongoDB fylls med demodata.
+5. Skriv till sist i samma Terminal `npm run startserver` så körs nu REST API:t lokalt mot `localhost:5000`. `OBS:` Du måste ha NodeJS globalt installerat! Annars använd VSCode.
 
 Klart! Nu kan du 'Build & Run' `maka2207-projekt` inuti Visual Studio 2022.
 
