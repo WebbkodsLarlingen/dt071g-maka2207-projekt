@@ -13,7 +13,7 @@
 
 Klart! Nu kan du 'Build & Run' `maka2207-projekt` inuti Visual Studio 2022.
 
-**OBS:** `npmrun installall` är ett så kallat `batch job` så du kanske måste avsluta "batch job" om localhost:5000 REST API slutar svara ibland på pga. Terminal VSCode-bug.
+**OBS:** `npmrun installall` är ett så kallat `batch job` så du kanske måste avsluta "batch job" om `localhost:5000 REST API` slutar svara ibland på pga. Terminal VSCode-bug.
 
 ## VAD ÄR DETTA?
 

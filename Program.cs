@@ -51,10 +51,10 @@ namespace maka2207_projekt
             // Demand secret password before even showing anything else! As requested by customer
             // Initialize secretPassword variable for input
             string secretPassword = "";
-            // secretPassword = SecretPassword.TheSecretPassword(); // Class function that hides input
+            secretPassword = SecretPassword.TheSecretPassword(); // Class function that hides input
 
             // Check password
-            if(secretPassword != "") // FIX: change back to "hemlis" after all done
+            if(secretPassword != "hemlis")
             {
                 // Just kill application if it's not correct.
                 Environment.Exit(0);
