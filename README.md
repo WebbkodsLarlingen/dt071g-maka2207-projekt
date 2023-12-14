@@ -47,7 +47,7 @@ Följande kommandon gäller efter lyckad inloggning som Systemadministratör.
 
 Tillgängliga kommandon i AI Datorer AB:s Kommandotolk
 -----------------------------------------------------
-**LOGGA UT UR KONSOLAPPLIKATIONEN**
+**LOGGA UT UR KONSOLAPPLIKATIONEN (EJ REST API)**
 - Logga ut ur Konsolapplikationen: `logout`
 
 		- Exempel: `logout` (du loggas nu ut ur Konsolapplikationen)
