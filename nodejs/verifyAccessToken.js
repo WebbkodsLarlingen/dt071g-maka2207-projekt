@@ -43,7 +43,7 @@ const verifyAccessToken = () => async (req, res, next) => {
       } else {
         console.log("ACCESS TOKEN LÖPT UT!");
         client.close();
-        return res.status(403).json({ error: "Åtkomst nekad!" });
+        return res.status(403).json({ error: "Åtkomst nekad! Logga in igen?" });
       }
     } catch (e) {
       client.close();

@@ -23,7 +23,9 @@ namespace maka2207_projekt
             "changeuser",
             "deleteuser",
             "logoutuser",
-            "userroles" 
+            "userroles",
+            "activateuser",
+            "deactivateuser"
         };
         static string[] apiEndpoint = // REST API Endpoints for each command
         {
@@ -36,6 +38,8 @@ namespace maka2207_projekt
             "/deleteuser",
             "/logoutuser",
             "/userroles",
+            "/activateuser",
+            "/deactivateuser"
         };
         static string[] crudType = // Matching CRUD (GET,POST,PUT,DELETE) to correct api Endpoint
         {
@@ -46,6 +50,8 @@ namespace maka2207_projekt
             "post",
             "put",
             "delete",
+            "put",
+            "put",
             "put",
             "put",
          };
@@ -60,6 +66,8 @@ namespace maka2207_projekt
             2, // deleteuser
             1, // logoutuser
             4, // userroles
+            1, // activateuser
+            1, // deactivateuser
         };
         static string[] jsonParams = // JSON Properties needed for each command
         {
@@ -72,7 +80,8 @@ namespace maka2207_projekt
             "user,password", // deleteuser
             "user", // logoutuser
             "user,adddel,role,password", // userroles
-
+            "user", // activateuser
+            "user", // deactivateuser
         };
 
         // The actual Async Function Itself

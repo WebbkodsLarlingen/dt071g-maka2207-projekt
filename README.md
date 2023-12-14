@@ -19,7 +19,8 @@ Projektet är en Console App-baserad KOMMANDOTOLK (CLI = Command-Line Interface) 
 
 Via kommandotolken kan du:
 - Administrera över anställda med olika behörigheter som arbetar vid AI Datorer AB.
-- Du kan blockera användare (de kan logga in men meddelas att deras konton är låsta).
+- Du kan (av)blockera användare (de kan logga in men meddelas att deras konton är låsta efter inloggning).
+- Du kan (in)aktivera användarkonton (de kan inte ens logga in utan meddelas att kontona är inaktiverade).
 - Du kan CRUD:a användare (utläsa, skapa nya, ändra och/eller radera befintliga).
 - Du kan logga ut användare (genom att deras refresh token nollställs).
 - Du kan ändra användarnas behörigheter till att CRUDa datorkomponenter i intranätet.
@@ -59,9 +60,18 @@ Tillgängliga kommandon i AI Datorer AB:s Kommandotolk
 	
 		- Exempel: `blockuser testUser1` (blockerar användaren som har användarnamnet:"testUser1")
 
-- Avblockera specifik användare `unblock <userName>`
+- Avblockera specifik användare `unblockuser <userName>`
 	
 		- Exempel: `unblockuser testUser1` (avblockerar användaren som har användarnamnet:"testUser1")
+
+**(IN)AKTIVERA ANVÄNDARE (PUT BLOCKUSER)**
+- Aktivera specifikt användarkonto `activateuser <userName>`
+	
+		- Exempel: `activateuser testUser1` (aktiverar kontot för användaren som har användarnamnet:"testUser1")
+
+- Inaktivera specifikt användarkonto `deactivateuser <userName>`
+	
+		- Exempel: `deactivatekuser testUser1` (deaktiverar kontot för användaren som har användarnamnet:"testUser1")
 
 **SKAPA ANVÄNDARE (POST USER)**
 - Skapa ny användare `adduser <userName> <userEmail> <userPassword>`

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text; // For using encodings
+using System.Text.Json; // For JSON methods
 using System.Threading.Tasks;
 
 namespace maka2207_projekt
@@ -14,6 +16,8 @@ namespace maka2207_projekt
             bool resStatus = false;
             string resData = "";
 
+            try
+            {
             // Create HttpRequestMessage object
             var reqAll = new HttpRequestMessage
             {
@@ -43,9 +47,15 @@ namespace maka2207_projekt
                 string responseContent = await resAll.Content.ReadAsStringAsync();
                 resData = responseContent; resStatus = false;
                 return (httpClient, handler, resData, resStatus);
-            }
-
-            // OLDER "LEGACY VERSIONS" (just a few hours old!)
+            }} catch (Exception ex)// Catch any possible errors raised and just say it failed talking to the REST API
+                {
+                    resStatus =false;
+                    // To avoid ambiguity with Newtonsoft.JSON
+                    resData = System.Text.Json.JsonSerializer.Serialize(new {error = "Misslyckades kommunicera med REST API:t. Prova igen!"});
+                    return (httpClient, handler, resData, resStatus);
+                }
+            ///////////////////////////////////////////////////////////////////////////
+            // OLDER "LEGACY VERSIONS" (just a few hours old!) <- EASTER EGGS!!!!!!!!!
             // REST API - GET /showallusers (JSON BODY {})
             if (apiStr == "/showallusers")
             {

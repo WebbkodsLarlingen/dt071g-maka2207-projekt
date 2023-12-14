@@ -8,7 +8,7 @@
     "installmongodb": "node scripts/installmongodb.js",
     "generatetokens": "node scripts/generatetokens.js",
     "startserver": "nodemon server.js",
-    "installall": "npm run installserver && npm run installmongodb && npm run startserver"
+    "installall": "npm run installserver && npm run installmongodb"
   },
   "keywords": [],
   "author": "WebbKodsLärlingen/maka2207",
