@@ -467,7 +467,7 @@ async function installMongoDB() {
       useremail: "superdupernoob@AiDatorer.se",
       userfullname: "Robert Rosenspira",
       userpassword: hashedPwTestUser3,
-      roles: ["put_images", "delete_components"],
+      roles: [],
       access_token:
         "fU3eqQTcySVvzDF4RfY7Sghzpke4oSw1fU3eqQTcySVvzDF4RfY7Sghzpke4oSw1",
       refresh_token:

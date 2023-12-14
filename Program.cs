@@ -5,7 +5,6 @@ using System.Threading.Tasks; // For Asynchronous behavior
 using System.Text; // For using encodings
 using System.Text.Json; // For JSON methods
 using Newtonsoft.Json; // NuGet Dependency - For Even better JSON manipulation!
-using System.Runtime.InteropServices.JavaScript;
 using Newtonsoft.Json.Linq;
 using static maka2207_projekt.UserData;
 
@@ -17,7 +16,7 @@ namespace maka2207_projekt
         static bool loggedIn = false; // Logged in?
         static bool loggedOut = false; // Logged out?
         static bool serverOnline = false; // REST API online?                                  
-        static string[] matchRoles = { 
+        static string[] matchRoles = { // To map & split on "=" when showing roles for user(s)
             "get_images=- Får visa bilder",
             "post_images=- Får publicera bilder",
             "put_images=- Får ändra bilder",
@@ -30,6 +29,10 @@ namespace maka2207_projekt
 
     static async Task Main(string[] args) // Async Task makes it act asynchronous and also being able to await
         {
+            // Set window size
+            Console.WindowWidth = 230;
+            Console.WindowHeight = 50;
+            
             // Window Title (outside of the Windows Console App)
             Console.Title = "AI DATORER AB - SYSTEMADMINISTRATIV KOMMANDOTOLK"; 
             // Main Header used through entire lifecycle of program.
@@ -106,6 +109,40 @@ namespace maka2207_projekt
                 // Exit main while-loop when it is logout!
                 if(command.ToLower() == "logout") { break; }
 
+                // SHOW AVAILABLE COMMANDS!
+                if(command.ToLower() == "help")
+                {
+                    Console.WriteLine("INSTRUKTIONER: Ett kommando i taget skrivs och sedan trycker du på ENTER/RETUR.");
+                    Console.WriteLine($"{string.Empty,15}Skriv först kommandonamn, sedan eventuella parametrar vilket");
+                    Console.WriteLine($"{string.Empty,15}visas nedan inuti<> men dessa skrivs inte med i faktiska kommandot.");
+                    Console.WriteLine($"{string.Empty,15}Varje mellanslag efter kommandonamnet indikerar en ny parameter.");
+                    Console.WriteLine($"{string.Empty,15}Du meddelas om antalet parametrar när du har angett fel antal.");
+                    Console.WriteLine($"{string.Empty,15}||-tecknen inuti <> betyder vilka olika parametrar du kan ange.");
+                    Console.WriteLine($"{string.Empty,15}Exempelvis `showuser` kan ta användarnamn eller dess e-postadress.");
+                    Console.WriteLine($"{string.Empty,15}");
+                    Console.WriteLine($"{string.Empty,15}'Blockera' vs 'Aktivera' = Förstnämnda låter dig logga in men du");
+                    Console.WriteLine($"{string.Empty,15}meddelas att ditt konto är blockerat. Sistnämnda låter dig inte");
+                    Console.WriteLine($"{string.Empty,15}ens logga in utan du meddelas då redan vid inloggningsförsök!");
+                    Console.WriteLine($"{string.Empty,15}");
+                    Console.WriteLine($"{string.Empty,15}<sysadminpass> = du måste ange ditt lösenord för att få köra kommandot.");
+                    Console.WriteLine($"{string.Empty,15}");
+                    Console.WriteLine($"{string.Empty,15}Användare utloggad = deras åtkomst- och uppdateringsnycklar nollställs.");
+                    Console.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                    Console.WriteLine($"{"KOMMANDOSYNTAX",-100}{"EXEMPEL",-75}{"VAD DEN GÖR"}");
+                    Console.WriteLine($"{"showallusers",-100}{"showallusers",-75}{"Visar alla användarkonton"}");
+                    Console.WriteLine($"{"showuser <username||useremail>",-100}{"showuser CoolDude",-75}{"Visar ett användarkonto"}");
+                    Console.WriteLine($"{"blockuser <username>",-100}{"blockuser CoolDude",-75}{"Blockerar ett användarkonto"}");
+                    Console.WriteLine($"{"unblockuser <username>",-100}{"unblockuser CoolDude",-75}{"Avblockerar ett användarkonto"}");
+                    Console.WriteLine($"{"activateuser <username>",-100}{"activateuser CoolDude",-75}{"Aktiverar ett användarkonto"}");
+                    Console.WriteLine($"{"deactivateuser <username>",-100}{"deactivateuser CoolDude",-75}{"Inaktiverar ett användarkonto"}");
+                    Console.WriteLine($"{"logoutuser <username||useremail>",-100}{"logoutuser CoolDude@aidatorer.se",-75}{"Loggar ut ett användarkonto"}");
+                    Console.WriteLine($"{"changeuser <username||useremail> <username||useremail||userpassword> <newvalue> <sysadminpass>",-100}{"changeuser CoolDude@aidatorer.se username CoolNotDude <sysadminpass>",-75}{"Ändrar användaruppgift för ett användarkonto"}");
+                    Console.WriteLine($"{"adduser <username> <useremail> <userpassword>",-100}{"adduser CoolDude2 CoolDude2@aidatorer.se superbraLosen1337",-75}{"Skapar ett nytt användarkonto"}");
+                    Console.WriteLine($"{"userroles <username||useremail> <add||delete> <roleToAddOrDelete> <sysadminpass>",-100}{"userroles CoolNotDude add get_images <sysadminpass>",-75}{"Lägger till/raderar en roll från ett användarkonto"}");
+                    Console.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                    continue;
+                }
+
                 // When "commandOK" is true, then we send request to REST API
                 bool commandOK = false;
 
@@ -148,27 +185,25 @@ namespace maka2207_projekt
                     {
                         // Choose correct class to JSON deserialize with = Single User
                         if(apiStr == "/showuser"){
-                            // -25 = Left alignment for prettier data display
+                            // -35 = Left alignment for prettier data display
                             UserData userData = JsonConvert.DeserializeObject<UserData>(dataVal.ToString());
                             Console.WriteLine("---------------------------------------");
-                            Console.WriteLine($"{"ANVÄNDARNAMN",-25}{"E-POST"}");
-                            Console.WriteLine($"{userData.Username,-25}{userData.Useremail}");
-                            Console.WriteLine($"\n{"FULLSTÄNDIGT NAMN",-25}{"SENAST INLOGGAD"}");
-                            Console.WriteLine($"{userData.Userfullname,-25}{userData.Last_login}");
-                            Console.WriteLine($"\n{"ÅTKOMSTNYCKEL:"}");
-                            Console.WriteLine($"{userData.Access_token}");
-                            Console.WriteLine($"\n{"UPPDATERINGSNYCKEL:"}");
-                            Console.WriteLine($"{userData.Refresh_token}");
-                            Console.WriteLine($"\n{"KONTO BLOCKERAT?",-25}{"KONTO AKTIVERAT?"}");
-                            Console.WriteLine($"{userData.Account_blocked,-25}{userData.Account_activated}");
-                            Console.WriteLine("\nROLLER:");
+                            Console.WriteLine($" {"ANVÄNDARNAMN",-35}{"E-POST",-35}{"FULLSTÄNDIGT NAMN",-35}{"SENAST INLOGGAD"}");
+                            Console.WriteLine($" {userData.Username,-35}{userData.Useremail,-35}{userData.Userfullname,-35}{userData.Last_login}");
+                            Console.WriteLine($"\n {"ÅTKOMSTNYCKEL",-35}{"UPPDATERINGSNYCKEL",-35}{"KONTO BLOCKERAT?",-35}{"KONTO AKTIVERAT?"}");
+                            Console.WriteLine($" {userData.Access_token.Substring(0, Math.Min(15, userData.Access_token.Length)),-35}{userData.Refresh_token.Substring(0, Math.Min(15, userData.Refresh_token.Length)),-35}{userData.Account_blocked,-35}{userData.Account_activated}");
                             // Loop through "ROLES:"
+                            Console.WriteLine("\nROLLER:");
+                            if(userData.Roles.Count == 0)
+                            {
+                                Console.WriteLine("Inga roller tilldelade ännu!");
+                            }
+                                
                             foreach (string role in userData.Roles)
                             {
                                 // When no roles there yet, jump out of foreach Loop
                                 if(userData.Roles.Count == 0)
-                                {
-                                    Console.WriteLine("Inga roller tilldelade ännu!");
+                                {                              
                                     break;
                                 }
 
@@ -193,27 +228,34 @@ namespace maka2207_projekt
                         // Choose correct class to JSON deserialize with = All Users
                         else if(apiStr == "/showallusers"){
                             List<UserData> userList = JsonConvert.DeserializeObject<List<UserData>>(dataVal.ToString());
+                            // First show for EACH USER:USERNAME, USEREMAIl, USERFULLNAME, LAST_LOGIN, ACCOUNT_BLOCKED, ACCOUNT_ACTIVATED
+                            Console.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                            Console.WriteLine($" {"ANVÄNDARNAMN",-35}{"E-POST",-35}{"FULLSTÄNDIGT NAMN",-35}{"SENAST INLOGGAD",-35}{"KONTO BLOCKERAT?",-35}{"KONTO AKTIVERAT?"}");
+                            Console.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                             foreach (UserData userData in userList)
                             {
-                                Console.WriteLine("---------------------------------------");
-                                Console.WriteLine($"{"ANVÄNDARNAMN",-25}{"E-POST"}");
-                                Console.WriteLine($"{userData.Username,-25}{userData.Useremail}");
-                                Console.WriteLine($"\n{"FULLSTÄNDIGT NAMN",-25}{"SENAST INLOGGAD"}");
-                                Console.WriteLine($"{userData.Userfullname,-25}{userData.Last_login}");
-                                Console.WriteLine($"\n{"ÅTKOMSTNYCKEL:"}");
-                                Console.WriteLine($"{userData.Access_token}");
-                                Console.WriteLine($"\n{"UPPDATERINGSNYCKEL:"}");
-                                Console.WriteLine($"{userData.Refresh_token}");
-                                Console.WriteLine($"\n{"KONTO BLOCKERAT?",-25}{"KONTO AKTIVERAT?"}");
-                                Console.WriteLine($"{userData.Account_blocked,-25}{userData.Account_activated}");
-                                Console.WriteLine("\nROLLER:");
-                                // Loop through "ROLES:"
+                                Console.WriteLine($" {userData.Username,-35}{userData.Useremail,-35}{userData.Userfullname,-35}{userData.Last_login,-35}{userData.Account_blocked,-35}{userData.Account_activated}");
+                                Console.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                            }
+
+                            // THEN SHOW PART OF ACCESS_TOKEN & REFRESH_TOKEN & all ROLES FOR EACH USER
+                            Console.WriteLine("\n");
+                            Console.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                            Console.WriteLine($" {"ANVÄNDARNAMN",-35}{"ÅTKOMSTNYCKEL",-35}{"UPPDATERINGSNYCKEL",-35}{"ROLLER"}");
+                            Console.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                            foreach (UserData userData in userList) {
+                                Console.Write($" {userData.Username,-35}{userData.Access_token.Substring(0, Math.Min(15, userData.Access_token.Length)),-35}{userData.Refresh_token.Substring(0, Math.Min(15, userData.Refresh_token.Length)),-35}");
+
+                                // Show when there are no roles assigned!
+                                if(userData.Roles.Count == 0) {
+                                    Console.Write($"{"Inga roller tilldelade ännu!\n"}");
+                                }
+                                // Looping through roles
                                 foreach (string role in userData.Roles)
                                 {
                                     // When no roles there yet, jump out of foreach Loop
                                     if (userData.Roles.Count == 0)
-                                    {
-                                        Console.WriteLine("Inga roller tilldelade ännu!");
+                                    {                     
                                         break;
                                     }
 
@@ -225,18 +267,23 @@ namespace maka2207_projekt
                                         // Grab its description after "="
                                         string roleDescription = matchingRole.Split('=')[1].Trim();
 
-                                        // Output it plus the data variable name version of it within ()
-                                        Console.Write($"{roleDescription,-25} ({matchingRole.Split('=')[0]})\n");
+                                        // After first -35 we do not need -105 to push all the way, so check if first.
+                                        if(userData.Roles.IndexOf(role) == 0)
+                                        { 
+                                        Console.Write($"{roleDescription,-35} ({matchingRole.Split('=')[0]})\n");
+                                        }
+                                        // Output it plus the data variable name version of it within () (when on a new line)                                     
+                                        Console.Write($"{"",-106}{roleDescription,-35} ({matchingRole.Split('=')[0]})\n");
                                     }
                                     else // When not found in the array for some reason
                                     {
-                                        Console.WriteLine("");
+                                        Console.Write("");
                                     }
 
                                 }
+                                Console.WriteLine("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");  
                             }
-                        }
-                    
+                        }                 
                     }
                 }
                 // Otherwise NOT OK so it will include error-property only
@@ -248,7 +295,7 @@ namespace maka2207_projekt
                 }
 
                 // Inform that screen will clear after any key is pressed!
-                Console.WriteLine("\n<Tryck valfri tangent för att rensa skärmen och skriva nytt kommando...>");
+                Console.WriteLine("\n <Tryck valfri tangent för att rensa skärmen och skriva nytt kommando...>");
                 Console.ReadKey();
                 Console.Clear();
                 Console.WriteLine(mainHeaderLoggedIn);
@@ -259,8 +306,14 @@ namespace maka2207_projekt
             (httpClient, handler, loggedOut) = await Logout.AttemptLogout(httpClient, handler, loggedOut);
             if(loggedOut == false)
             {
-                Console.WriteLine("Utloggning misslyckades! Din inloggningssession i databasen är kvar!");
-            } else { Console.WriteLine("Du är nu utloggad, käre Systemadministratör!");  }
+                Console.WriteLine(" Utloggning misslyckades! Din inloggningssession i databasen är kvar!");
+            } 
+            else 
+            {
+                Console.Clear();
+                Console.WriteLine(mainHeader);
+                Console.WriteLine( "Du är nu utloggad, käre Systemadministratör!"); 
+            }
             Environment.Exit(0);
             // GOOD BYE C# CONSOLE APP! By: ©2023-2024 maka2207 / WebbKodsLärlingen
         }

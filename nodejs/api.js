@@ -329,12 +329,13 @@ router.get("/showuser", mongoDB("maka2207", "users"), async (req, res) => {
           : findSingleUser.refresh_token,
       account_blocked: findSingleUser.account_blocked ? "Ja" : "Nej",
       account_activated: findSingleUser.account_activated ? "Ja" : "Nej",
-      roles: findSingleUser.roles,
+      roles: findSingleUser.roles ? findSingleUser.roles : "",
       last_login:
         findSingleUser.last_login == ""
           ? "Aldrig inloggad"
           : findSingleUser.last_login,
     };
+    console.log(returnSingleUser);
     client.close();
     return res
       .status(200)
