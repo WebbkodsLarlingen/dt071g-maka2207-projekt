@@ -36,7 +36,7 @@ Via kommandotolken kan du:
 
 ## KOMMANDOTOLKENS SIMPLA SYNTAX
 Följande kommandon gäller efter lyckad inloggning som Systemadministratör.
-* `OBS:` Skriv `help` om du behöver en lista direkt inuti Console App med kommandosyntax, exempel samt vad de gör!
+* `OBS:` Skriv `help` och tryck ENTER/RETUR inuti programmet efter inloggning om du behöver en lista med kommandosyntax, exempel, och information om vad varje kommando gör!
 * När det står `<>` så betyder det att här kommer din paremeter in. Men parametrar skrivs utan de faktiska "<>"-tecknen.
 * När det står `<||>` så kan du alltså skriva en av två olika parametrar, men bara en av dem.
 * <sysadminPassword> betyder att du måste avsluta kommandot med ditt nuvarande systemadministrativa lösenord annars nekas kommandot.
