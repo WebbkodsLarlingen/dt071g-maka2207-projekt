@@ -139,6 +139,7 @@ namespace maka2207_projekt
                     Console.WriteLine($"{"changeuser <username||useremail> <username||useremail||userpassword> <newvalue> <sysadminpass>",-100}{"changeuser CoolDude@aidatorer.se username CoolNotDude <sysadminpass>",-75}{"Ändrar användaruppgift för ett användarkonto"}");
                     Console.WriteLine($"{"adduser <username> <useremail> <userpassword>",-100}{"adduser CoolDude2 CoolDude2@aidatorer.se superbraLosen1337",-75}{"Skapar ett nytt användarkonto"}");
                     Console.WriteLine($"{"userroles <username||useremail> <add||delete> <roleToAddOrDelete> <sysadminpass>",-100}{"userroles CoolNotDude add get_images <sysadminpass>",-75}{"Lägger till/raderar en roll från ett användarkonto"}");
+                    Console.WriteLine($"{"logout",-100}{"logout",-75}{"Loggar ut Systemadministratören ur Konsolapplikationen"}");
                     Console.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                     continue;
                 }

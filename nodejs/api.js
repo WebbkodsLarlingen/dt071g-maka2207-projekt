@@ -335,7 +335,6 @@ router.get("/showuser", mongoDB("maka2207", "users"), async (req, res) => {
           ? "Aldrig inloggad"
           : findSingleUser.last_login,
     };
-    console.log(returnSingleUser);
     client.close();
     return res
       .status(200)
