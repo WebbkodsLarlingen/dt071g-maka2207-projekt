@@ -78,7 +78,7 @@ namespace maka2207_projekt
                 if(loggedIn == false && serverOnline == true)
                 {
                     // Show error and loop again until logged in!
-                    Console.WriteLine(error+"Felaktiga inloggningsuppgifter!");
+                    Console.WriteLine(errorAPI+"Felaktiga inloggningsuppgifter!");
                 } 
                 // REST API offline so login of course fails
                 else if(loggedIn == false && serverOnline == false)
@@ -273,8 +273,9 @@ namespace maka2207_projekt
                                         { 
                                         Console.Write($"{roleDescription,-35} ({matchingRole.Split('=')[0]})\n");
                                         }
+                                        else { Console.Write($"{"",-106}{roleDescription,-35} ({matchingRole.Split('=')[0]})\n"); }
                                         // Output it plus the data variable name version of it within () (when on a new line)                                     
-                                        Console.Write($"{"",-106}{roleDescription,-35} ({matchingRole.Split('=')[0]})\n");
+                                        
                                     }
                                     else // When not found in the array for some reason
                                     {
